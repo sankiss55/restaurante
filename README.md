@@ -6,6 +6,7 @@ Sistema de gestión de pedidos para restaurante en tiempo real. Permite a los me
 
 ## 📋 Tabla de Contenidos
 
+- [Screenshots](#-screenshots)
 - [Características](#-características)
 - [Tecnologías](#-tecnologías)
 - [Arquitectura](#-arquitectura)
@@ -13,6 +14,25 @@ Sistema de gestión de pedidos para restaurante en tiempo real. Permite a los me
 - [Inicio rápido](#-inicio-rápido)
 - [Roles y funcionalidades](#-roles-y-funcionalidades)
 - [Créditos](#-créditos)
+
+---
+
+## 📸 Screenshots
+
+### 🔐 Login
+![Login](./docs/f4.png)
+
+### 🧑‍💼 Dashboard — Administrador
+![Dashboard](./docs/f1.png)
+
+### 👥 Gestión de Usuarios
+![Usuarios](./docs/f5.png)
+
+### 🧑‍🍽️ Panel del Mesero
+![Mesero](./docs/f3.png)
+
+### 👨‍🍳 Panel de Cocina
+![Cocina](./docs/f2.png)
 
 ---
 
@@ -130,10 +150,10 @@ Para instrucciones detalladas de cada parte:
 | Parte | Autor |
 |---|---|
 | Backend (NestJS, PostgreSQL, Docker) | Santiago Vera |
-| Integración API y lógica frontend | Santiago Vera +[Claude] (Anthropic AI)  |
-| Diseño UI y componentes React | Santiago Vera + [Claude] (Anthropic AI) |
+| Integración API y lógica frontend | Santiago Vera |
+| Diseño UI y componentes React | Santiago Vera + [Claude](https://claude.ai) (Anthropic AI) |
 
-> 💡 Los componentes de interfaz fueron desarrollados con asistencia de [Claude] (Anthropic AI), con integración a la API y lógica de negocio implementadas manualmente. 
+> 💡 Los componentes de interfaz fueron desarrollados con asistencia de [Claude](https://claude.ai) (Anthropic AI), con integración a la API y lógica de negocio implementadas manualmente.
 
 ---
 
