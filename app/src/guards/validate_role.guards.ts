@@ -17,6 +17,8 @@ export class ValidateRoleGuards implements CanActivate{
     if (!user || !user.rol) {
             throw new ForbiddenException("No tienes permisos para acceder a este recurso (Usuario no identificado)");
         }
+        console.error(user.rol);
+        console.error(requesRoles);
     const hasRole = requesRoles.includes(user.rol);
 
         if (!hasRole) {

@@ -7,7 +7,7 @@ import { ProductosServces } from "./productos.services";
 import { ProductosFilterDTO, ProductosUpdateDTO } from "src/dtos/Productos";
 import { ModelResponce } from "src/responces/ModelResponse";
 import { ExceptionsResponse } from "src/responces/ExceptionsResponces";
-
+import { Roles, RolesList } from "src/decorators/role.decorator";
 @Controller("productos")
 @ApiTags("Productos")
 @ApiResponse({status: HttpStatus.BAD_REQUEST, description: 'Error de validación en los datos enviados', type: ExceptionsResponse})
@@ -17,14 +17,15 @@ export class ProductosController{
     constructor(private readonly ProductosServices:ProductosServces){}
 
     @Post("crear_producto")
+    @Roles(RolesList.ADMIN)
 @ApiConsumes('multipart/form-data')
 @UseInterceptors(FileInterceptor('imagen', {
   storage: diskStorage({
-    destination: './uploads/productos',  // 👈 crea la carpeta automáticamente
+    destination: './uploads/productos',  
     filename: (req, file, cb) => {
       const timestamp = Date.now();
       const ext = extname(file.originalname);
-      cb(null, `producto_${timestamp}${ext}`);  // 👈 nombre del archivo
+      cb(null, `producto_${timestamp}${ext}`);  
     }
   })
 }))
@@ -43,6 +44,7 @@ async CrearProducto(
 }
 
     @Get("buscar")
+    @Roles( RolesList.MESERO,RolesList.ADMIN)
     @ApiOperation({ summary: 'Buscar productos con filtros opcionales', description: 'Busca productos en el sistema. Si no proporciona filtros, devuelve todos los productos. Los filtros son opcionales y se pueden combinar.' })
     @ApiResponse({ status: 200, description: 'Búsqueda completada exitosamente', type: ModelResponce })
     async BuscarProductos(@Query() filtro: ProductosFilterDTO): Promise<ModelResponce> {
@@ -53,6 +55,8 @@ async CrearProducto(
             message: `Se encontraron ${productos.length} producto(s).`
         };
     }
+    
+    @Roles(RolesList.ADMIN, RolesList.COCINERO)
 @Patch("modificar/:id")
 @UseInterceptors(FileInterceptor('imagen', {
   storage: diskStorage({
@@ -79,6 +83,8 @@ async ActualizarProducto(
   return await this.ProductosServices.ActualizarProducto(id, updateData);
 }
 
+
+    @Roles(RolesList.ADMIN)
     @Patch("cambiar_disponibilidad/:id")
     @ApiBody({
        schema:{

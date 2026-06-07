@@ -13,7 +13,7 @@ import { ExceptionsResponse } from "src/responces/ExceptionsResponces";
 export class DetallesOrdenesController{
     constructor(private readonly DetallesOrdenesService:DetallesOrdenesService){}
     @Post("crear_detalle")
-    @ApiOperation({ summary: 'Crear un nuevo detalle de orden', description: 'Agrega un detalle (línea de producto) a una orden existente con la cantidad, precio unitario, subtotal y notas especiales.' })
+    @ApiOperation({ summary: 'Crear un nuevo detalle de orden', description: 'Agrega un detalle (línea de producto) a una orden existente con la cantidad, precio unitario, subtotal y notas especiales.', deprecated:true })
     @ApiResponse({ status: 201, description: 'Detalle de orden creado exitosamente', type: ModelResponce })
     async CrearDetalles(@Body() dataCreate:DetallesOrdenesCreateDTO):Promise<ModelResponce>{
         return await this.DetallesOrdenesService.CrearDetalle(dataCreate);

@@ -4,11 +4,13 @@ import { CategoriasServices } from "./categorias.services";
 import { CategoriasModificarPDO, CategoriasProductosDTO } from "src/dtos/categorias_productos";
 import { ModelResponce } from "src/responces/ModelResponse";
 import { ExceptionsResponse } from "src/responces/ExceptionsResponces";
+import { Roles, RolesList } from "src/decorators/role.decorator";
 @Controller("categorias")
 @ApiTags("Categorias")
 @ApiResponse({status: HttpStatus.BAD_REQUEST, description: 'Error de validación en los datos enviados', type: ExceptionsResponse})
 @ApiResponse({status: HttpStatus.CONFLICT, description: 'Conflicto: nombre duplicado o tiene productos asociados', type: ExceptionsResponse})
 @ApiResponse({status: HttpStatus.NOT_FOUND, description: 'La categoría no existe', type: ExceptionsResponse})
+@Roles(RolesList.ADMIN)
 export class CategoriasController{
     constructor(private readonly CategoriasServices:CategoriasServices){}
     @Post("crear_categoria")
@@ -30,6 +32,7 @@ export class CategoriasController{
 
     }
     @Get("all_categorias")
+@Roles(RolesList.ADMIN,RolesList.MESERO)
     @ApiOperation({
         description:"Endpoint para los o el administrador para poder buscar todas las categorias con o sin fintro de busqueda",
         summary:'Endpoint para busqueda de categorias',

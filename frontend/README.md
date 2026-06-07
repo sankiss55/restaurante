@@ -1,73 +1,137 @@
-# React + TypeScript + Vite
+# 🎨 Frontend — Pedidos Restaurante
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Interfaz de usuario construida con React y TypeScript. Organizada por roles (admin, mesero, cocina) con comunicación en tiempo real mediante WebSockets.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 📋 Tabla de Contenidos
 
-## React Compiler
+- [Tecnologías](#-tecnologías)
+- [Estructura del proyecto](#-estructura-del-proyecto)
+- [Variables de entorno](#-variables-de-entorno)
+- [Instalación y ejecución](#-instalación-y-ejecución)
+- [Módulos por rol](#-módulos-por-rol)
+- [Hooks principales](#-hooks-principales)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🛠️ Tecnologías
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+| Tecnología | Uso |
+|---|---|
+| [React](https://react.dev/) | Librería de interfaz de usuario |
+| [TypeScript](https://www.typescriptlang.org/) | Tipado estático |
+| [Vite](https://vitejs.dev/) | Bundler y servidor de desarrollo |
+| [Tailwind CSS](https://tailwindcss.com/) | Estilos utilitarios |
+| [Docker](https://www.docker.com/) | Contenedorización del frontend |
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 🗂️ Estructura del proyecto
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+frontend/src/
+├── components/         # Componentes reutilizables globales
+├── context/            # AuthContext (sesión y JWT)
+├── hooks/              # Hooks globales (useToast, useWebSocket...)
+├── layouts/            # Layouts por rol (Admin, Mesero, Cocina)
+├── modules/
+│   ├── admin/          # Páginas del administrador
+│   │   └── pages/      # Mesas, Productos, Categorías, Usuarios
+│   ├── mesero/         # Módulo del mesero
+│   │   ├── components/ # SelectorMesas, ProductoMenu, ResumenPedido...
+│   │   ├── hooks/      # useMeseroMesas, usePedido
+│   │   ├── pages/      # NuevoPedido
+│   │   └── services/   # meseroService
+│   └── cocina/         # Módulo de cocina
+│       ├── components/ # TarjetaOrdenCocina
+│       └── pages/      # PedidosActivos
+├── pages/              # Páginas globales (Login, Dashboard)
+├── services/           # Llamadas a la API REST
+└── utils/              # Utilidades (imageUpload, etc.)
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🔐 Variables de entorno
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Crea un archivo `.env` en la raíz de `frontend/`:
+
+```env
+VITE_API_URL=http://localhost:3000
+VITE_WS_URL=ws://localhost:3000
 ```
+
+> ⚠️ Las variables en Vite deben empezar con `VITE_` para ser accesibles en el código. Nunca subas el `.env` al repositorio.
+
+---
+
+## 🚀 Instalación y ejecución
+
+### Opción 1 — Docker (recomendado)
+
+```bash
+# Desde la carpeta frontend/
+cd frontend
+
+# Primera vez o después de cambios
+docker compose up --build -d
+
+# Solo reiniciar
+docker compose up -d
+
+# Ver logs
+docker compose logs -f
+
+# Detener
+docker compose down
+```
+
+### Opción 2 — Desarrollo local
+
+```bash
+cd frontend
+
+# Instalar dependencias
+npm install
+
+# Iniciar servidor de desarrollo con hot reload
+npm run dev
+
+# Compilar para producción
+npm run build
+```
+
+El frontend estará disponible en: `http://localhost:5173`
+
+---
+
+## 👥 Módulos por rol
+
+### 🧑‍💼 Admin (`/modules/admin`)
+- **MesasAdmin** — crear, activar/desactivar mesas
+- **ProductosAdmin** — gestión de productos con imagen
+- **CategoriasAdmin** — gestión de categorías
+- **UsuariosAdmin** — gestión de usuarios del sistema
+
+### 🧑‍🍽️ Mesero (`/modules/mesero`)
+- **NuevoPedido** — panel de 3 columnas:
+  - Izquierda: selector de mesas disponibles
+  - Centro: catálogo de productos con búsqueda y filtros por categoría
+  - Derecha: resumen del pedido y órdenes activas de la mesa
+
+### 👨‍🍳 Cocina (`/modules/cocina`)
+- **PedidosActivos** — tarjetas de órdenes en tiempo real con botón para cambiar estado
+
+---
+
+## 🪝 Hooks principales
+
+| Hook | Descripción |
+|---|---|
+| `useAuth` | Acceso a usuario, rol y JWT desde el contexto |
+| `useToast` | Notificaciones de éxito, error e información |
+| `useWebSocket` | Conexión al servidor de WebSockets por rol |
+| `useMeseroMesas` | Mesas disponibles y atendidas por el mesero |
+| `usePedido` | Estado y lógica del pedido actual |
+| `useFetch` | Hook genérico para llamadas a la API |

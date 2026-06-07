@@ -132,20 +132,16 @@ export class OrdenesGateway
   }
 
   private broadcastOrdenActualizada(orden: any): void {
-   
-    
     const mensaje = {
       type: 'ordenes-actualizar',
       data: orden,
     };
-
     if (this.cocinaClients.size > 0) {
-     
       this.cocinaClients.forEach((client) => {
         client.emit('ordenes-actualizar', mensaje);
       });
     } else {
-      console.warn(`[WS-GATEWAY] ⚠️ No hay cocineros conectados para recibir la orden`);
+      console.warn(`[WS-GATEWAY] No hay cocineros conectados para recibir la orden`);
     }
 
     if (this.meseroClients.size > 0) {

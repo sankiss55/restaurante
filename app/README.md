@@ -1,98 +1,190 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# ⚙️ Backend — Pedidos Restaurante
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API REST construida con NestJS que gestiona toda la lógica del sistema: autenticación, mesas, órdenes, productos y comunicación en tiempo real con WebSockets.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## 📋 Tabla de Contenidos
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- [Tecnologías](#-tecnologías)
+- [Estructura del proyecto](#-estructura-del-proyecto)
+- [Variables de entorno](#-variables-de-entorno)
+- [Instalación con Docker](#-instalación-con-docker)
+- [Endpoints](#-endpoints)
+- [WebSockets](#-websockets)
+- [Estados de una orden](#-estados-de-una-orden)
 
-## Project setup
+---
 
-```bash
-$ npm install
+## 🛠️ Tecnologías
+
+| Tecnología | Uso |
+|---|---|
+| [NestJS](https://nestjs.com/) | Framework principal |
+| [PostgreSQL](https://www.postgresql.org/) | Base de datos relacional |
+| [TypeORM](https://typeorm.io/) | ORM para entidades y migraciones |
+| [Docker](https://www.docker.com/) | Contenedorización del servidor y BD |
+| [JWT](https://jwt.io/) | Autenticación y autorización por roles |
+| [WebSockets](https://docs.nestjs.com/websockets/gateways) | Comunicación en tiempo real |
+| [Swagger](https://swagger.io/) | Documentación interactiva de la API |
+
+---
+
+## 🗂️ Estructura del proyecto
+
+```
+app/src/
+├── configs/          # Configuración (DB, JWT, etc.)
+├── controllers/      # Controladores HTTP
+├── decorators/       # Decoradores personalizados
+├── dtos/             # Data Transfer Objects (validación)
+├── dump_BD/          # Respaldos de la BD
+├── entities/         # Entidades TypeORM
+├── filters/          # Filtros de excepciones
+├── gateways/         # WebSocket gateways
+├── guards/           # Guards de autenticación JWT
+├── responces/        # Modelos de respuesta estándar
+├── services/         # Lógica de negocio
+└── main.ts           # Punto de entrada
 ```
 
-## Compile and run the project
+---
 
-```bash
-# development
-$ npm run start
+## 🔐 Variables de entorno
 
-# watch mode
-$ npm run start:dev
+Crea un archivo `.env` en la raíz de `app/`. Estas variables son inyectadas automáticamente por Docker:
 
-# production mode
-$ npm run start:prod
+```env
+# PostgreSQL
+POSTGRES_USER=admin
+POSTGRES_PASSWORD=tu_contraseña
+POSTGRES_DB=restaurante
+POOL_SIZE=10
+HOST_DATABASE=db
+PORT_DATBASE=5432
+
+# Roles
+KEY_ROLES=roles
+
+# JWT
+JWT_SECRET=tu_clave_secreta_segura
+JWT_ISSUER=Restaurante_santan
 ```
 
-## Run tests
+> ⚠️ Nunca subas el `.env` al repositorio. Verifica que esté en `.gitignore`.
+
+---
+
+## 🐳 Instalación con Docker
 
 ```bash
-# unit tests
-$ npm run test
+# Desde la carpeta app/
+cd app
 
-# e2e tests
-$ npm run test:e2e
+# Primera vez o después de cambios en el código
+docker compose up --build -d
 
-# test coverage
-$ npm run test:cov
+# Solo reiniciar (sin reconstruir)
+docker compose up -d
+
+# Ver logs en tiempo real
+docker compose logs -f
+
+# Detener contenedores
+docker compose down
 ```
 
-## Deployment
+La API estará disponible en: `http://localhost:3000`  
+Documentación Swagger en: `http://localhost:3000/api`
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+> El `docker-compose.yml` levanta dos servicios: el servidor NestJS y PostgreSQL. Las variables del `.env` se inyectan automáticamente.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+---
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+## 📡 Endpoints
+
+La documentación completa e interactiva está en Swagger en `/api`. Resumen por módulo:
+
+### App
+| Método | Endpoint | Descripción |
+|---|---|---|
+| GET | `/` | Verificación que la API responda |
+
+### Usuarios
+| Método | Endpoint | Descripción |
+|---|---|---|
+| POST | `/usuarios/CreateUser` | Crear nuevo usuario |
+| POST | `/usuarios/login` | Inicio de sesión, retorna JWT |
+| GET | `/usuarios` | Listar usuarios |
+
+### Mesas
+| Método | Endpoint | Descripción |
+|---|---|---|
+| POST | `/mesas/crearMesas` | Crear nueva mesa |
+| GET | `/mesas/traer_mesas` | Listar mesas con filtro |
+| GET | `/mesas/mis_mesas/:idUsuario` | Mesas asignadas al mesero |
+| GET | `/mesas/disponibles` | Mesas disponibles |
+| PATCH | `/mesas/estado_atendida/:id` | Cambiar estado atendida/desocupada |
+| PATCH | `/mesas/modificar_estado/:id` | Activar o desactivar mesa |
+| PATCH | `/mesas/asignar/:idMesa/:idUsuario` | Asignar mesa a un mesero |
+
+### Órdenes
+| Método | Endpoint | Descripción |
+|---|---|---|
+| POST | `/ordenes/crear_orden` | Crear orden básica |
+| POST | `/ordenes/crear_orden_completa` | Crear orden con detalles |
+| POST | `/ordenes/listar/estados` | Obtener órdenes por estados |
+| PATCH | `/ordenes/:id/estado` | Cambiar estado de una orden |
+| PATCH | `/ordenes/:id/marcar-pagado` | Marcar orden como pagada |
+| DELETE | `/ordenes/cancelar/:id` | Cancelar una orden |
+| DELETE | `/ordenes/detalles/:id` | Eliminar un detalle de orden |
+
+### Productos
+| Método | Endpoint | Descripción |
+|---|---|---|
+| POST | `/productos/crear_producto` | Crear producto |
+| GET | `/productos/buscar` | Buscar productos con filtros |
+| PATCH | `/productos/modificar/:id` | Modificar producto |
+| PATCH | `/productos/cambiar_disponibilidad/:id` | Activar/desactivar disponibilidad |
+
+### Categorías
+| Método | Endpoint | Descripción |
+|---|---|---|
+| POST | `/categorias/crear_categoria` | Crear categoría |
+| GET | `/categorias/all_categorias` | Listar categorías |
+| PATCH | `/categorias/modificar_info` | Actualizar categoría |
+| DELETE | `/categorias/eliminar_categoria/:id` | Eliminar categoría |
+
+### Detalles de Órdenes
+| Método | Endpoint | Descripción |
+|---|---|---|
+| POST | `/detalles_ordenes/crear_detalle` | Crear detalle de orden |
+
+---
+
+## 🔌 WebSockets
+
+El servidor emite los siguientes eventos en tiempo real:
+
+| Evento | Descripción | Quién lo recibe |
+|---|---|---|
+| `actualizacion-orden` | Nueva orden o cambio de estado | Cocina, mesero |
+| `mesa-liberada` | Mesa desocupada al pagar | Meseros |
+
+---
+
+## 🔄 Estados de una orden
+
+```
+1. Pendiente  ──►  2. Preparando  ──►  3. Listo  ──►  5. Pagada
+                                            │
+                                            └──►  4. Cancelada
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+| ID | Estado | Quién lo asigna |
+|---|---|---|
+| 1 | Pendiente | Se asigna al crear la orden |
+| 2 | Preparando | Cocinero |
+| 3 | Listo | Cocinero |
+| 4 | Cancelada | Sistema |
+| 5 | Pagada | Mesero |

@@ -15,7 +15,7 @@ import { ExceptionsResponse } from "src/responces/ExceptionsResponces";
 export class UsuariosController{
     constructor(private readonly UsuariosServices:UsuariosServices ){}
     @Post("/CreateUser")
-    //@Roles(RolesList.ADMIN)
+    @Roles(RolesList.ADMIN)
     @ApiResponse({
         status:'2XX',
         description:'Respuesta cuando se crea exitosamente a un nuevo usuario dentro del sistema.',
@@ -50,6 +50,8 @@ export class UsuariosController{
     login(@Body() data: LoguinUsuarios){
         return this.UsuariosServices.LoginUsuario(data)
     }
+
+    @Roles(RolesList.ADMIN)
     @Get()
     async AllUsuarios():Promise<ModelResponce>{
         const data=await this.UsuariosServices.AllUsuarios();

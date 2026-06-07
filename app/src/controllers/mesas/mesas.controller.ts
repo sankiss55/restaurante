@@ -13,7 +13,7 @@ import { MesasEntitie } from "src/entities/mesas.entitie";
 @ApiResponse({status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Error interno del servidor', type: ExceptionsResponse})
 export class MesasController{
     constructor(private readonly MesasService:MesasService){}
-    ////@Roles(RolesList.ADMIN)
+    @Roles(RolesList.ADMIN)
     @Post("crearMesas")
     @ApiResponse({
     status: 201,
@@ -53,8 +53,7 @@ export class MesasController{
         return this.MesasService.Atendida_Desocupada_Mesa(id, valor);
     }
 
-    //@Roles(RolesList.ADMIN)
-    
+@Roles(RolesList.ADMIN)    
     @Patch("modificar_estado/:id")
      @ApiResponse({
         description:"Respuesta cuando se desactiva una mesa existente.",
@@ -75,6 +74,7 @@ export class MesasController{
         description:"Endpoint para el o los administradores para traer todas las mesas dependiendo el filtro",
         tags:['Mesas']
     })
+    @Roles(RolesList.MESERO, RolesList.ADMIN)
     @Get("traer_mesas")
     @ApiQuery({name:'filtro',
         type:String,
@@ -88,7 +88,7 @@ export class MesasController{
         return await this.MesasService.TraerAllMesas(filtro);
     }
 
-    //@Roles(RolesList.MESERO)
+    @Roles(RolesList.ADMIN, RolesList.MESERO)
     @Get("mis_mesas/:idUsuario")
     @ApiOperation({
         summary: "Obtener mesas asignadas al mesero",
@@ -98,7 +98,7 @@ export class MesasController{
     async ObtenerMesasPorMesero(@Param('idUsuario', ParseIntPipe) idUsuario: number): Promise<ModelResponce> {
         return await this.MesasService.ObtenerMesasPorMesero(idUsuario);
     }
-
+@Roles(RolesList.ADMIN)
     @Get("disponibles")
     @ApiOperation({
         summary: "Obtener mesas disponibles",

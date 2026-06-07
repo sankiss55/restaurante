@@ -18,7 +18,7 @@ async function bootstrap() {
   app.useWebSocketAdapter(new IoAdapter(app));
 
   app.enableCors({
-    origin: true, // Esto hace que acepte cualquier origen permitiendo credenciales
+    origin: true,// solo pruebas
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
@@ -30,7 +30,12 @@ async function bootstrap() {
     },
   }))
   app.useGlobalFilters(new JWTExceptionFilter, new PostgresExceptionFilter);
-  const config= new DocumentBuilder().setTitle("Documentacion api restaurante").addBearerAuth().build();
+  const config= new DocumentBuilder().setTitle("Documentacion API restaurante").addBearerAuth().setDescription("Proyecto de ejercicio para la eercitacion del tranajo con el framework nestjs.").setVersion("1.0.1").setExternalDoc("Mas informacion sobre el trabajo del proyecto.", "https://github.com/sankiss55/restaurante").setContact("Santiago Vera", "https://sankiss55.github.io/KISSAN-STUDIO/", "").addTag("App", "Verificación que la api responda.").
+  addTag("Categorias", "Gestión de Categorias")
+   .addTag("Usuarios", "Gestión de usuarios")
+  .addTag("Mesas", "Gestión de mesas")
+  .addTag("Ordenes", "Gestión de órdenes")
+  .addTag("Productos", "Gestión de productos").build();
   const doc=SwaggerModule.createDocument(app,config);
   SwaggerModule.setup("docs",app, doc )
   await app.listen(process.env.PORT ?? 3000);
