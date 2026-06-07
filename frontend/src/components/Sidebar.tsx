@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-
+import { LayoutDashboard } from 'lucide-react'
 interface SidebarProps {
   moduleType?: 'admin' | 'mesero' | 'cocina';
 }
@@ -23,6 +23,17 @@ const Sidebar: React.FC<SidebarProps> = ({ moduleType = 'admin' }) => {
                 {/* ADMIN MODULE */}
                 {moduleType === 'admin' && (
                   <>
+                  <Link 
+                      to="/admin" 
+                      className={`flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-colors group ${
+                         location.pathname === '/admin'
+                          ? 'bg-[#E9EFE9] text-[#2C3322]'
+                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                      }`}
+                    >
+                        <LayoutDashboard/>
+                        Dashboard
+                    </Link>
                     <Link 
                       to="/admin/mesas" 
                       className={`flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-colors group ${

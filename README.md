@@ -10,11 +10,9 @@ Sistema de gestión de pedidos para restaurante en tiempo real. Permite a los me
 - [Tecnologías](#-tecnologías)
 - [Arquitectura](#-arquitectura)
 - [Requisitos previos](#-requisitos-previos)
-- [Variables de entorno](#-variables-de-entorno)
-- [Instalación y ejecución](#-instalación-y-ejecución)
+- [Inicio rápido](#-inicio-rápido)
 - [Roles y funcionalidades](#-roles-y-funcionalidades)
-- [Endpoints principales](#-endpoints-principales)
-- [Estructura del proyecto](#-estructura-del-proyecto)
+- [Créditos](#-créditos)
 
 ---
 
@@ -49,6 +47,7 @@ Sistema de gestión de pedidos para restaurante en tiempo real. Permite a los me
 | [TypeScript](https://www.typescriptlang.org/) | Tipado estático |
 | [Vite](https://vitejs.dev/) | Bundler y servidor de desarrollo |
 | [Tailwind CSS](https://tailwindcss.com/) | Estilos utilitarios |
+| [Docker](https://www.docker.com/) | Contenedorización del frontend |
 
 ---
 
@@ -79,7 +78,7 @@ restaurante/
 ## ✅ Requisitos previos
 
 - [Docker](https://www.docker.com/) y Docker Compose
-- [Node.js](https://nodejs.org/) v18 o superior
+- [Node.js](https://nodejs.org/) v20 o superior
 - [npm](https://www.npmjs.com/)
 
 ---
@@ -110,6 +109,7 @@ Para instrucciones detalladas de cada parte:
 - Gestión completa de **usuarios** (crear, editar, desactivar)
 - Gestión de **mesas** (activar/desactivar, crear)
 - Gestión de **productos** y **categorías**
+- **Dashboard** con métricas de ganancias, órdenes y productos
 
 ### 🧑‍🍽️ Mesero
 - Ver mesas disponibles en tiempo real
@@ -122,6 +122,18 @@ Para instrucciones detalladas de cada parte:
 - Cambiar estado de orden:
   - `Pendiente` → `Preparando`
   - `Preparando` → `Listo`
+
+---
+
+## 🤖 Créditos
+
+| Parte | Autor |
+|---|---|
+| Backend (NestJS, PostgreSQL, Docker) | Santiago Vera |
+| Integración API y lógica frontend | Santiago Vera +[Claude] (Anthropic AI)  |
+| Diseño UI y componentes React | Santiago Vera + [Claude] (Anthropic AI) |
+
+> 💡 Los componentes de interfaz fueron desarrollados con asistencia de [Claude] (Anthropic AI), con integración a la API y lógica de negocio implementadas manualmente. 
 
 ---
 

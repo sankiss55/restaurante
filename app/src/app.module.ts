@@ -9,9 +9,10 @@ import { CategoriaProductosModule } from './controllers/categorias_productos/cat
 import { ProductosModule } from './controllers/productos/productos.module';
 import { DetallesOrdenModule } from './controllers/detalles_orden/detalle_orden.module';
 import { OrdenesModule } from './controllers/orden/orden.module';
+import { DashboardModule } from './controllers/dashboard/dashboard.module';
 
 @Module({
-  imports: [ConfigDataBase, JWT_CONFIG, UsuariosModule, MesasModule, CategoriaProductosModule, ProductosModule, DetallesOrdenModule, OrdenesModule],
+  imports: [ConfigDataBase, JWT_CONFIG, UsuariosModule, MesasModule, CategoriaProductosModule, ProductosModule, DetallesOrdenModule, OrdenesModule, DashboardModule],
   controllers: [AppController],
   providers: [AppService],
 })
